@@ -1,5 +1,7 @@
 # Packages used
 
+library(tidyverse)
+
 # Load the data
 
 if (!file.exists("Electric Power Consumption data")) {
@@ -8,4 +10,8 @@ if (!file.exists("Electric Power Consumption data")) {
 
 HPC_data <- read.csv("household_power_consumption.txt", sep = ";")
 
-# 
+# Plotting
+
+## Plot 1
+    
+    
