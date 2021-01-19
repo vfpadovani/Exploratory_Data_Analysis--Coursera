@@ -2,7 +2,7 @@
 
 # Load the data
 
-if (!file.exists("Ellectric Power Consumption data")) {
+if (!file.exists("Electric Power Consumption data")) {
     unzip("exdata_data_household_power_consumption.zip")
 }
 
