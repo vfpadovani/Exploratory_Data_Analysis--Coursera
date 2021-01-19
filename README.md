@@ -1,4 +1,4 @@
-# Exploratory_Data_Analysis--Coursera
+# Exploratory Data Analysis - Coursera
 
 This Repository Contains the Course Projects on Coursera's Exploratory Data Analysis by Johns Hopkins University. 
 
