@@ -1,5 +1,6 @@
 # Packages used
 
+library(lubridate)
 library(tidyverse)
 
 # Load the data
@@ -10,8 +11,15 @@ if (!file.exists("Electric Power Consumption data")) {
 
 HPC_data <- read.csv("household_power_consumption.txt", sep = ";")
 
-# Plotting
+# Convert and filter date 
 
-## Plot 1
-    
+str(HPC_data)
+
+HPC_data$Date <- as.Date(HPC_data$Date, tryFormats = "%d/%m/%Y")
+
+HPC_data <- 
+    HPC_data %>%
+        filter(Date == c("2007-02-01", "2007-02-02"))
+
+
     
