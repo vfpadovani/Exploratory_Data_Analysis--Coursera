@@ -181,7 +181,7 @@ plot4.4 <-
           panel.background = element_rect()
     )+
     labs(x = "datetime",
-         y = "Global Active Power") +
+         y = "Global Reactive Power") +
     scale_x_datetime(date_labels = "%a",
                      breaks = "1 day")
 
