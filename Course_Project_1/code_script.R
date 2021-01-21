@@ -1,7 +1,6 @@
 # Packages used
 
 library(tidyverse)
-library(gganimate)
 library(patchwork)
 library(extrafont)
 
@@ -73,12 +72,11 @@ plot2 <-
         labs(x = element_blank(),
              y = "Global Active Power (kilowatts)") +
         scale_x_datetime(date_labels = "%a",
-                         breaks = "1 day") +
-    transition_reveal(along = as.POSIXct(DateTime))
+                         breaks = "1 day")
 
 if (!file.exists("plot2.png")) {ggsave("plot2.png", plot = plot2)}
 
-### *"qui", "sex" & "sab" are portuguese for "thu", "fri" & "sat"*
+### *"qui", "sex" & "sab" are Portuguese for "thu", "fri" & "sat"*
 
 ## Plot 3
 
@@ -114,8 +112,79 @@ if (!file.exists("plot3.png")) {ggsave("plot3.png", plot = plot3)}
 
 ## Plot 4
 
-barplot(HPC_data$Global_active_power,
-        ylab = "Global Active Power (kilowatts)",
-        xlab = "Weekdays")
+plot4.1 <-
+    ggplot(HPC_data) +
+    geom_line(aes(y = Global_active_power,
+                  x = as.POSIXct(DateTime))) +
+    theme_minimal() +
+    theme(text = element_text("Overpass"),
+          strip.text = element_text(face = 'bold',
+                                    hjust = .5),
+          panel.background = element_rect()
+    )+
+    labs(x = element_blank(),
+         y = "Global Active Power") +
+    scale_x_datetime(date_labels = "%a",
+                     breaks = "1 day")
 
+plot4.2 <-
+    ggplot(HPC_data) +
+    geom_line(aes(y = Voltage,
+                  x = as.POSIXct(DateTime))) +
+    theme_minimal() +
+    theme(text = element_text("Overpass"),
+          strip.text = element_text(face = 'bold',
+                                    hjust = .5),
+          panel.background = element_rect()
+    )+
+    labs(x = "datetime",
+         y = "Voltage") +
+    scale_x_datetime(date_labels = "%a",
+                     breaks = "1 day") +
+    scale_y_continuous(breaks = c(234, 238, 242, 246))    
 
+plot4.3 <-
+    ggplot(HPC_data, aes(x = as.POSIXct(DateTime))) +
+    geom_line(aes(y = Sub_metering_1,
+                  colour = "Sub_metering_1")) +
+    geom_line(aes(y = Sub_metering_2,
+                  colour = "Sub_metering_2")) +
+    geom_line(aes(y = Sub_metering_3,
+                  colour = "Sub_metering_3")) +
+    theme_minimal() +
+    theme(text = element_text("Overpass"),
+          strip.text = element_text(face = 'bold',
+                                    hjust = .5),
+          panel.background = element_rect(),
+          legend.position = c(1, 1),
+          legend.justification = c("right", "top"),
+          legend.box.background = element_rect(),
+          legend.box.just = "right",
+          legend.background = element_blank(),
+          legend.key.size = unit(.25, "cm")
+    )+
+    labs(x = element_blank(),
+         y = "Energy sub metering",
+         colour = "Legend") +
+    scale_x_datetime(date_labels = "%a",
+                     breaks = "1 day") +
+    scale_color_manual(values = colors)
+
+plot4.4 <-
+    ggplot(HPC_data) +
+    geom_line(aes(y = Global_reactive_power,
+                  x = as.POSIXct(DateTime))) +
+    theme_minimal() +
+    theme(text = element_text("Overpass"),
+          strip.text = element_text(face = 'bold',
+                                    hjust = .5),
+          panel.background = element_rect()
+    )+
+    labs(x = "datetime",
+         y = "Global Active Power") +
+    scale_x_datetime(date_labels = "%a",
+                     breaks = "1 day")
+
+plot4 <- (plot4.1|plot4.2) / (plot4.3|plot4.4)
+
+if (!file.exists("plot4.png")) {ggsave("plot4.png", plot = plot4)} 
