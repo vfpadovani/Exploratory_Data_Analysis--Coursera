@@ -29,8 +29,6 @@ HPC_data <-
         select(DateTime, everything()) %>%
         select(-c(Date, Time))
 
-weekdays(HPC_data$DateTime, abbreviate = T)
-
 # plotting
 
 ## Plot 1
