@@ -13,4 +13,6 @@ All the code for the plots are in 'code_script.R' file, which contains the follo
     4.3 Plot 3
     4.4 Plot 4
 
-NOTE: The weekdays in my plots are in BR-Portuguese by system settings, "qui" (quinta-feira) refers to "thu" (thursday), "sex" (sexta-feira) refers to "fri" (friday), "sáb" (sábado) refers to "sat" (saturday). 
+All plots were build with the 'ggplot2' package.
+
+NOTE: The weekdays in my plots are in BR-Portuguese by system settings, "qui" (quinta-feira) refers to "thu" (thursday), "sex" (sexta-feira) refers to "fri" (friday) and "sáb" (sábado) refers to "sat" (saturday). 
