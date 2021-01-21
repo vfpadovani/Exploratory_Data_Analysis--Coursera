@@ -7,11 +7,11 @@ All the code for the plots are in 'code_script.R' file, which contains the follo
 1. The used Packages
 2. How to load the data
 3. How to convert and filter date and time
-4. Plotting itself
-    4.1 Plot 1
-    4.2 Plot 2
-    4.3 Plot 3
-    4.4 Plot 4
+4. Plotting itself  
+    4.1 Plot 1  
+    4.2 Plot 2  
+    4.3 Plot 3  
+    4.4 Plot 4  
 
 All plots were build with the 'ggplot2' package.
 
