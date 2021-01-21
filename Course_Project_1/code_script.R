@@ -1,7 +1,8 @@
 # Packages used
 
 library(tidyverse)
-library(lubridate)
+library(gganimate)
+library(patchwork)
 library(extrafont)
 
 # Load the data
@@ -72,15 +73,44 @@ plot2 <-
         labs(x = element_blank(),
              y = "Global Active Power (kilowatts)") +
         scale_x_datetime(date_labels = "%a",
-                         breaks = "1 day")
+                         breaks = "1 day") +
+    transition_reveal(along = as.POSIXct(DateTime))
 
 if (!file.exists("plot2.png")) {ggsave("plot2.png", plot = plot2)}
 
-#### "qui", "sex" & "sab" are portuguese for "thu", "fri" & "sat".
+### *"qui", "sex" & "sab" are portuguese for "thu", "fri" & "sat"*
 
 ## Plot 3
 
+colors <- c("Sub_metering_1" = "black", "Sub_metering_2" = "red", "Sub_metering_3" = "steelblue")
 
+plot3 <-
+    ggplot(HPC_data, aes(x = as.POSIXct(DateTime))) +
+        geom_line(aes(y = Sub_metering_1,
+                      colour = "Sub_metering_1")) +
+        geom_line(aes(y = Sub_metering_2,
+                  colour = "Sub_metering_2")) +
+        geom_line(aes(y = Sub_metering_3,
+                  colour = "Sub_metering_3")) +
+        theme_minimal() +
+        theme(text = element_text("Overpass"),
+              strip.text = element_text(face = 'bold',
+                                        hjust = .5),
+              panel.background = element_rect(),
+              legend.position = c(1, 1),
+              legend.justification = c("right", "top"),
+              legend.box.background = element_rect(),
+              legend.box.just = "right",
+              legend.background = element_blank()
+        )+
+        labs(x = element_blank(),
+             y = "Energy sub metering",
+             colour = "Legend") +
+        scale_x_datetime(date_labels = "%a",
+                         breaks = "1 day") +
+        scale_color_manual(values = colors)
+
+if (!file.exists("plot3.png")) {ggsave("plot3.png", plot = plot3)}        
 
 ## Plot 4
 
