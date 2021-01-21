@@ -76,8 +76,6 @@ plot2 <-
 
 if (!file.exists("plot2.png")) {ggsave("plot2.png", plot = plot2)}
 
-### *"qui", "sex" & "sab" are Portuguese for "thu", "fri" & "sat"*
-
 ## Plot 3
 
 colors <- c("Sub_metering_1" = "black", "Sub_metering_2" = "red", "Sub_metering_3" = "steelblue")
