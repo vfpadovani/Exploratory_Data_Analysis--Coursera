@@ -29,7 +29,7 @@ HPC_data <-
         select(DateTime, everything()) %>%
         select(-c(Date, Time))
 
-weekdays(HPC_data$Date, abbreviate = T)
+weekdays(HPC_data$DateTime, abbreviate = T)
 
 # plotting
 
@@ -61,15 +61,24 @@ if (!file.exists("plot1.png")) {ggsave("plot1.png", plot = plot1)}
 
 ## Plot 2
 
-ggplot(HPC_data) +
-    geom_curve(aes(x = DateTime,
-                   y = Global_active_power))
-    
+plot2 <-
+    ggplot(HPC_data) +
+        geom_line(aes(y = Global_active_power,
+                      x = as.POSIXct(DateTime))) +
+        theme_minimal() +
+        theme(text = element_text("Overpass"),
+              strip.text = element_text(face = 'bold',
+                                        hjust = .5),
+              panel.background = element_rect()
+              )+
+        labs(x = element_blank(),
+             y = "Global Active Power (kilowatts)") +
+        scale_x_datetime(date_labels = "%a",
+                         breaks = "1 day")
 
-barplot(HPC_data$Global_active_power,
-        ylab = "Global Active Power (kilowatts)",
-        xlab = "Weekdays")
-       # xbreaks = c("Thu", "Fri", "Sat"))
+if (!file.exists("plot2.png")) {ggsave("plot2.png", plot = plot2)}
+
+#### "qui", "sex" & "sab" are portuguese for "thu", "fri" & "sat".
 
 ## Plot 3
 
