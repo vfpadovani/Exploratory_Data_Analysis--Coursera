@@ -1,8 +1,6 @@
 # Packages used
 
 library(tidyverse)
-library(patchwork)
-library(extrafont)
 
 # Load the data
 
@@ -33,156 +31,55 @@ HPC_data <-
 
 ## Plot 1
 
-plot1 <- 
-    ggplot(HPC_data) +
-        geom_histogram(aes(Global_active_power),
-                       colour = "black",
-                       fill = "red",
-                       bins = 18
-                      ) +
-        theme_minimal() +
-        theme(
-            plot.title = element_text(hjust = 0.4),
-            text = element_text("Overpass"),
-            strip.text = element_text(face = 'bold',
-                                      hjust = 2),
-            panel.grid = element_blank()
-        )+
-        labs(title = "Global Active Power",
-             x = "Global Active Power (kilowatts)",
-             y = "Frequency") +
-        scale_x_continuous(breaks = c(0, 2, 4, 6)) +
-        scale_y_continuous(breaks = c(0, 200, 400, 600, 800, 1000, 1200))
+with(HPC_data)
+hist(Global_active_power, main = "Global active power", col = "red",
+     xlab = "Global active power (kilowatts)", las = 1, ylim = c(0,1200))
 
-if (!file.exists("plot1.png")) {ggsave("plot1.png", plot = plot1)}
-    
+dev.copy(png, file = "plot1.png")
+dev.off()
+
 
 ## Plot 2
 
-plot2 <-
-    ggplot(HPC_data) +
-        geom_line(aes(y = Global_active_power,
-                      x = as.POSIXct(DateTime))) +
-        theme_minimal() +
-        theme(text = element_text("Overpass"),
-              strip.text = element_text(face = 'bold',
-                                        hjust = .5),
-              panel.background = element_rect()
-              )+
-        labs(x = element_blank(),
-             y = "Global Active Power (kilowatts)") +
-        scale_x_datetime(date_labels = "%a",
-                         breaks = "1 day")
+with(HPC_data)
+plot(Global_active_power ~ as.POSIXct(DateTime), type = "l",
+     xlab = "", ylab = "Global Active Power (kilowatts)")
 
-if (!file.exists("plot2.png")) {ggsave("plot2.png", plot = plot2)}
+dev.copy(png, file = "plot2.png")
+dev.off()
 
 ## Plot 3
 
-colors <- c("Sub_metering_1" = "black", "Sub_metering_2" = "red", "Sub_metering_3" = "steelblue")
+with(HPC_data)       
+plot(Sub_metering_1 ~ as.POSIXct(DateTime), type = "l",
+     ylab = "Energy sub metering", xlab = "")
+lines(Sub_metering_2 ~ as.POSIXct(DateTime), col = "red")
+lines(Sub_metering_3 ~ as.POSIXct(DateTime), col = "blue")
+legend("topright", col = c("black", "red", "blue"),
+       legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty = 1)
 
-plot3 <-
-    ggplot(HPC_data, aes(x = as.POSIXct(DateTime))) +
-        geom_line(aes(y = Sub_metering_1,
-                      colour = "Sub_metering_1")) +
-        geom_line(aes(y = Sub_metering_2,
-                  colour = "Sub_metering_2")) +
-        geom_line(aes(y = Sub_metering_3,
-                  colour = "Sub_metering_3")) +
-        theme_minimal() +
-        theme(text = element_text("Overpass"),
-              strip.text = element_text(face = 'bold',
-                                        hjust = .5),
-              panel.background = element_rect(),
-              legend.position = c(1, 1),
-              legend.justification = c("right", "top"),
-              legend.box.background = element_rect(),
-              legend.box.just = "right",
-              legend.background = element_blank()
-        )+
-        labs(x = element_blank(),
-             y = "Energy sub metering",
-             colour = "Legend") +
-        scale_x_datetime(date_labels = "%a",
-                         breaks = "1 day") +
-        scale_color_manual(values = colors)
-
-if (!file.exists("plot3.png")) {ggsave("plot3.png", plot = plot3)}        
+dev.copy(png, file = "plot3.png")
+dev.off()
 
 ## Plot 4
 
-plot4.1 <-
-    ggplot(HPC_data) +
-    geom_line(aes(y = Global_active_power,
-                  x = as.POSIXct(DateTime))) +
-    theme_minimal() +
-    theme(text = element_text("Overpass"),
-          strip.text = element_text(face = 'bold',
-                                    hjust = .5),
-          panel.background = element_rect()
-    )+
-    labs(x = element_blank(),
-         y = "Global Active Power") +
-    scale_x_datetime(date_labels = "%a",
-                     breaks = "1 day")
+par(mfrow = c(2,2), mar = c(4, 4, 1, 1), oma = c(0, 0, 0, 0))
+with(HPC_data, {
+    plot(Global_active_power ~ as.POSIXct(DateTime), type = "l",
+         xlab = "", ylab = "Global Active Power")
+    plot(Voltage ~ as.POSIXct(DateTime), type = "l",
+         ylab = "Voltage", xlab = "datetime", ylim = c(234, 246))
+    plot(Sub_metering_1 ~ as.POSIXct(DateTime), type = "l",
+         ylab = "Energy sub metering", xlab = "")
+    lines(Sub_metering_2 ~ as.POSIXct(DateTime), col = "red")
+    lines(Sub_metering_3 ~ as.POSIXct(DateTime), col = "blue")
+    legend("topright", col = c("black", "red", "blue"), lty = 1, lwd = 2, bty = "n",
+           legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), cex = 1/2)
+    plot(Global_reactive_power ~ as.POSIXct(DateTime), type = "l", 
+         xlab =  "datetime", ylim = c(0, 0.5), las = 1)
+})
 
-plot4.2 <-
-    ggplot(HPC_data) +
-    geom_line(aes(y = Voltage,
-                  x = as.POSIXct(DateTime))) +
-    theme_minimal() +
-    theme(text = element_text("Overpass"),
-          strip.text = element_text(face = 'bold',
-                                    hjust = .5),
-          panel.background = element_rect()
-    )+
-    labs(x = "datetime",
-         y = "Voltage") +
-    scale_x_datetime(date_labels = "%a",
-                     breaks = "1 day") +
-    scale_y_continuous(breaks = c(234, 238, 242, 246))    
+dev.copy(png, file = "plot4.png")
+dev.off()
 
-plot4.3 <-
-    ggplot(HPC_data, aes(x = as.POSIXct(DateTime))) +
-    geom_line(aes(y = Sub_metering_1,
-                  colour = "Sub_metering_1")) +
-    geom_line(aes(y = Sub_metering_2,
-                  colour = "Sub_metering_2")) +
-    geom_line(aes(y = Sub_metering_3,
-                  colour = "Sub_metering_3")) +
-    theme_minimal() +
-    theme(text = element_text("Overpass"),
-          strip.text = element_text(face = 'bold',
-                                    hjust = .5),
-          panel.background = element_rect(),
-          legend.position = c(1, 1),
-          legend.justification = c("right", "top"),
-          legend.box.background = element_rect(),
-          legend.box.just = "right",
-          legend.background = element_blank(),
-          legend.key.size = unit(.25, "cm")
-    )+
-    labs(x = element_blank(),
-         y = "Energy sub metering",
-         colour = "Legend") +
-    scale_x_datetime(date_labels = "%a",
-                     breaks = "1 day") +
-    scale_color_manual(values = colors)
 
-plot4.4 <-
-    ggplot(HPC_data) +
-    geom_line(aes(y = Global_reactive_power,
-                  x = as.POSIXct(DateTime))) +
-    theme_minimal() +
-    theme(text = element_text("Overpass"),
-          strip.text = element_text(face = 'bold',
-                                    hjust = .5),
-          panel.background = element_rect()
-    )+
-    labs(x = "datetime",
-         y = "Global Reactive Power") +
-    scale_x_datetime(date_labels = "%a",
-                     breaks = "1 day")
-
-plot4 <- (plot4.1|plot4.2) / (plot4.3|plot4.4)
-
-if (!file.exists("plot4.png")) {ggsave("plot4.png", plot = plot4)} 
